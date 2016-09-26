@@ -2,14 +2,13 @@
 __author__ = 'TahirRauf'
 
 import sys
-# TODO: Use some other path
-sys.path.insert(0, '/opt/pg/kraken')
 from pprint import pprint, pformat  # NOQA
 from optparse import OptionParser
 import logging
 from hydra.lib import util
 from hydra.lib.runtestbase import RunTestBase
 from testbase import TestBase
+import time
 
 try:
     # Python 2.x
@@ -22,7 +21,7 @@ l = util.createlogger('ep', logging.INFO)
 # l.setLevel(logging.DEBUG)
 
 
-class EP(RunTestBase):
+class GL(RunTestBase):
     def __init__(self, options, runtest=True, mock=False):
         self.options = options
         self.config = ConfigParser()
@@ -41,11 +40,17 @@ class RunTest(object):
         if ((len(args) != 0)):
             parser.print_help()
             sys.exit(1)
-        hydra = EP(options, False)
+        hydra = GL(options, False)
         hydra.start_appserver()
         hydra.start_init()
         base = TestBase(hydra)
-        base.launch_clients(6, "insha")
+        base.launch_clients(
+            1, "inshaa0",
+            "python /home/plumgrid/event-processing/event_extraction/compare_events.py -a /home/plumgrid/event-processing/event_extraction/sample_data/plumgrid_normal.log.gz -b /home/plumgrid/event-processing/event_extraction/sample_data/plumgrid_ha.log.gz -o /tmp/")
+        #base.launch_clients(
+        #    1, "inshab",
+        #    "python /home/plumgrid/event-processing/event_extraction/compare_events.py -a ./sample_data/plumgrid_normal.log.gz -b ./sample_data/plumgrid_ha.log.gz -o /home/plumgrid/")
+        time.sleep(300)
 
         l.info("===== Deleting all launched apps")
         hydra.delete_all_launched_apps()

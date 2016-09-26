@@ -1,7 +1,6 @@
 __author__ = 'TahirRauf'
 
 import sys
-sys.path.insert(0, '/opt/pg/kraken')
 from pprint import pprint, pformat  # NOQA
 import logging
 import websocket
